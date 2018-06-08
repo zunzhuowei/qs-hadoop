@@ -11,6 +11,7 @@
 
     <modules>
         <module>qs-hadoop-hdfs</module>
+        <module>qs-hadoop-mapreduce</module>
     </modules>
 
     <properties>
@@ -30,5 +31,17 @@
         </repository>
     </repositories>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>${cdh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
 
 </project>

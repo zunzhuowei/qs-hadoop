@@ -1,10 +1,7 @@
 package com.qs.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -21,8 +18,8 @@ import java.net.URISyntaxException;
 public class HdfsApp {
 
     private static final String HDFS_URL = "hdfs://hadoop00:8020";
-    FileSystem fileSystem = null;
-    Configuration configuration = null;//00:0c:29:15:40:64
+    private FileSystem fileSystem = null;
+    private Configuration configuration = null;//00:0c:29:15:40:64
 
     /**
      * 创建目录
@@ -39,8 +36,8 @@ public class HdfsApp {
      */
     @Test
     public void putFile() throws IOException {
-        Path src = new Path("D:\\xueyou_play_show.sql");
-        Path dst = new Path("/hdfsapi/test02");
+        Path src = new Path("I:\\dept.sql");
+        Path dst = new Path("/hdfsapi/test02/dept.sql");
         fileSystem.copyFromLocalFile(src,dst);
     }
 
@@ -80,19 +77,26 @@ public class HdfsApp {
 
     @Test
     public void getFile() throws IOException {
-        Path localPath = new Path("E:/xueyou_play_show.sql");
-        Path hdfsPath = new Path("/hdfsapi/test02/xueyou_play_show.sql");
-        fileSystem.copyToLocalFile(hdfsPath,localPath);
+        Path localPath = new Path("F:\\hdfs-output");
+        Path hdfsPath = new Path("/hdfsapi/test02/dept.sql");
+        fileSystem.copyToLocalFile(false, hdfsPath, localPath, true);
     }
 
     @Test
-    public void listFiles() {
-
+    public void listFiles() throws IOException {
+        FileStatus[] fileStatuses = fileSystem.listStatus(new Path("/"));
+        for (FileStatus fileStatus : fileStatuses) {
+            String dir = fileStatus.isDirectory() ? "文件夹" : "文件";
+            short replication = fileStatus.getReplication();
+            long len = fileStatus.getLen();
+            String path = fileStatus.getPath().toString();
+            System.out.println(dir + "\t" + replication + "\t" + len + "\t" + path);
+        }
     }
 
     @Test
-    public void deleteFile() {
-
+    public void deleteFile() throws IOException {
+        fileSystem.delete(new Path(""), true);//第二个参数表示是否递归删除，默认递归。
     }
 
 
@@ -108,7 +112,7 @@ public class HdfsApp {
     public void endOff() {
         FileSystem fileSystem = null;
         Configuration configuration = null;
-        System.out.println("\nhdfs endoff");
+        System.out.println("\nhdfs end off");
 
     }
 
