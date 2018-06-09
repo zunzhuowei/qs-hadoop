@@ -1,0 +1,5 @@
+spring:
+  hadoop:
+    config:
+      fs:
+        defaultFS: hdfs://hadoop00:8020

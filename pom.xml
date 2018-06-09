@@ -13,6 +13,8 @@
         <module>qs-hadoop-hdfs</module>
         <module>qs-hadoop-mapreduce</module>
         <module>qs-hadoop-userBehaviorLog</module>
+        <module>qs-hadoop-spring</module>
+        <module>qs-hadoop-springboot</module>
     </modules>
 
     <properties>
