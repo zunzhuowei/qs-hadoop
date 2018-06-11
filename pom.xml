@@ -15,6 +15,7 @@
         <module>qs-hadoop-userBehaviorLog</module>
         <module>qs-hadoop-spring</module>
         <module>qs-hadoop-springboot</module>
+        <module>qs-hadoop-flink</module>
     </modules>
 
     <properties>
