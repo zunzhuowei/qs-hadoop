@@ -6,6 +6,7 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.util.Collector;
 
 import java.util.Arrays;
 
@@ -33,28 +34,24 @@ public class SocketWindowWordCount {
         // get input data by connecting to the socket
         DataStream<String> text = env.socketTextStream("localhost", port, "\n");
 
-
-
         // parse the data, group it, window it, and aggregate the counts
-        /*DataStream<WordWithCount> windowCounts = text
-                .flatMap((FlatMapFunction<String, WordWithCount>) (value, out) -> {
-                    for (String word : value.split("\\s")) {
-                        out.collect(new WordWithCount(word, 1L));
+        DataStream<WordWithCount> windowCounts = text
+                .flatMap(new FlatMapFunction<String, WordWithCount>() {
+                    @Override
+                    public void flatMap(String value, Collector<WordWithCount> out) {
+                        for (String word : value.split("\\s")) {
+                            out.collect(new WordWithCount(word, 1L));
+                        }
                     }
                 })
                 .keyBy("word")
                 .timeWindow(Time.seconds(5), Time.seconds(1))
-                .reduce((ReduceFunction<WordWithCount>) (a, b) -> new WordWithCount(a.word, a.count + b.count));*/
-
-        DataStream<WordWithCount> windowCounts = text
-                .flatMap((FlatMapFunction<String, WordWithCount>)
-                        (value, out) -> Arrays.stream(value.split("\\s"))
-                                .forEach(e -> out.collect(new WordWithCount(e, 1L))))
-                .keyBy("word")
-                .timeWindow(Time.seconds(5), Time.seconds(1))
-                .reduce((ReduceFunction<WordWithCount>)
-                        (a, b) -> new WordWithCount(a.word, a.count + b.count));
-
+                .reduce(new ReduceFunction<WordWithCount>() {
+                    @Override
+                    public WordWithCount reduce(WordWithCount a, WordWithCount b) {
+                        return new WordWithCount(a.word, a.count + b.count);
+                    }
+                });
 
         // print the results with a single thread, rather than in parallel
         windowCounts.print().setParallelism(1);
@@ -65,13 +62,12 @@ public class SocketWindowWordCount {
     // Data type for words with count
     public static class WordWithCount {
 
-        String word;
-        long count;
+        public String word;
+        public long count;
 
-        public WordWithCount() {
-        }
+        public WordWithCount() {}
 
-        WordWithCount(String word, long count) {
+        public WordWithCount(String word, long count) {
             this.word = word;
             this.count = count;
         }
@@ -82,4 +78,22 @@ public class SocketWindowWordCount {
         }
     }
 
+    /*
+
+    执行mvn构建。
+
+    $ mvn clean install
+    $ ls target/flink-demo-1.0-SNAPSHOT.jar
+    开启9000端口，用于输入数据：
+
+    $ nc -l 9000
+    提交flink任务：
+
+    $ ./bin/flink run -c com.demo.florian.WordCount  $DEMO_DIR/target/flink-demo-1.0-SNAPSHOT.jar --port 9000
+    在nc里输入数据后，查看执行结果：
+
+    $ tail -f log/flink-*-jobmanager-*.out
+    查看flink web页面：localhost:8081
+
+     */
 }
