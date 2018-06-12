@@ -1,18 +1,15 @@
 package com.qs.spark;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
+
+import java.util.Arrays;
 
 /**
  * Created by zun.wei on 2018/6/12 10:14.
@@ -20,76 +17,41 @@ import scala.Tuple2;
  */
 public class JavaWordCount {
 
+    /**
+     * 版本问题未实现。
+     * @param args
+     */
     public static void main(String[] args) {
-/*
         // create Spark context with Spark configuration
-        JavaSparkContext sc = new JavaSparkContext(new SparkConf().setAppName("Spark Count"));
-
-        // get threshold
-        final int threshold = Integer.parseInt(args[1]);
-
-        // read in text file and split each document into words
-        JavaRDD<String> tokenized = sc.textFile(args[0]).flatMap(
-                new FlatMapFunction() {
-                    public Iterable call(String s) {
-                        return Arrays.asList(s.split(" "));
+        JavaSparkContext sc = new JavaSparkContext(new SparkConf().setAppName("Spark Count java"));
+        System.out.println("args = " + args[0]);
+        JavaRDD<String> lines = sc.textFile(args[0]);
+        // Map each line to multiple words
+        JavaRDD<String> words = lines.flatMap(
+                new FlatMapFunction<String, String>() {
+                    public Iterable<String> call(String line) {
+                        return Arrays.asList(line.split(" "));
                     }
-                }
-        );
+                });
 
-        // count the occurrence of each word
-        JavaPairRDD<String, Integer> counts = tokenized.mapToPair(
-                new PairFunction() {
-                    public Tuple2 call(String s) {
-                        return new Tuple2(s, 1);
+// Turn the words into (word, 1) pairs
+        JavaPairRDD<String, Integer> ones = words.mapToPair(
+                new PairFunction<String, String, Integer>() {
+                    public Tuple2<String, Integer> call(String w) {
+                        return new Tuple2<String, Integer>(w, 1);
                     }
-                }
-        ).reduceByKey(
-                new Function2() {
-                    public Integer call(Integer i1, Integer i2) {
-                        return i1 + i2;
-                    }
-                }
-        );
+                });
 
-        // filter out words with fewer than threshold occurrences
-        JavaPairRDD<String, Integer> filtered = counts.filter(
-                new Function, Boolean>() {
-            public Boolean call(Tuple2 tup) {
-                return tup._2 >= threshold;
-            }
-        }
-    );
-
-        // count characters
-        JavaPairRDD<Character, Integer> charCounts = filtered.flatMap(
-                new FlatMapFunction<Tuple2<String, Integer>, Character>() {
-                    @Override
-                    public Iterable<Character> call(Tuple2<String, Integer> s) {
-                        Collection<Character> chars = new ArrayList<Character>(s._1().length());
-                        for (char c : s._1().toCharArray()) {
-                            chars.add(c);
-                        }
-                        return chars;
-                    }
-                }
-        ).mapToPair(
-                new PairFunction<Character, Character, Integer>() {
-                    @Override
-                    public Tuple2<Character, Integer> call(Character c) {
-                        return new Tuple2<Character, Integer>(c, 1);
-                    }
-                }
-        ).reduceByKey(
+// Group up and add the pairs by key to produce counts
+        JavaPairRDD<String, Integer> counts = ones.reduceByKey(
                 new Function2<Integer, Integer, Integer>() {
-                    @Override
                     public Integer call(Integer i1, Integer i2) {
                         return i1 + i2;
                     }
-                }
-        );
+                });
 
-        System.out.println(charCounts.collect());*/
+        counts.saveAsTextFile("hdfs://hadoop00:8020/counts.txt");
+
     }
 
 }
