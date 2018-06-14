@@ -1,0 +1,10 @@
+1) Could not locate executable null\bin\winutils.exe in the Hadoop binaries.
+        很明显应该是HADOOP_HOME的问题。如果HADOOP_HOME为空，必然fullExeName为null\bin\winutils.exe。
+        解决方法很简单，配置环境变量，不想重启电脑可以在程序里加上：
+        System.setProperty("hadoop.home.dir", "E:\\Program Files\\hadoop-2.7.0");
+        注：E:\\Program Files\\hadoop-2.7.0是我本机解压的hadoop的路径。
+        稍后再执行，你可能还是会出现同样的错误，这个时候你可能会要怪我了。
+        其实一开始我是拒绝的，因为你进入你的hadoop-x.x.x/bin目录下看，你会发现你压根就没有winutils.exe这个东东。
+        于是我告诉你，你可以去github下载一个，地球人都知道的地址发你一个。
+        地址：https://github.com/srccodes/hadoop-common-2.2.0-bin
+        不要顾虑它的版本，不用怕，因为我用的最新的hadoop-2.7.0都没问题！下载好后，把winutils.exe加入你的hadoop-x.x.x/bin下。

@@ -17,6 +17,7 @@
         <module>qs-hadoop-springboot</module>
         <module>qs-hadoop-flink</module>
         <module>qs-hadoop-spark</module>
+        <module>qs-hadoop-sparkSQL</module>
     </modules>
 
     <properties>
