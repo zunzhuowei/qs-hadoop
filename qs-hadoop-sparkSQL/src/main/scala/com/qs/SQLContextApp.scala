@@ -1,7 +1,8 @@
 package com.qs
 
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.{SparkConf, SparkContext}
 
 /**
   * 测试 sqlContext的使用
@@ -9,9 +10,12 @@ import org.apache.spark.sql.SQLContext
 object SQLContextApp {
 
   def main(args: Array[String]): Unit = {
+    //Logger.getLogger("org.apache.spark").setLevel(Level.DEBUG)
+    //Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
 
     //下面代码是window端本地调试需要用的参数，生产环境可以注释掉。
-    System.setProperty("hadoop.home.dir", "F:\\hadoop-2.6.0-cdh5.7.0")
+    //System.setProperty("hadoop.home.dir", "F:\\hadoop-2.6.0-cdh5.7.0")
+    System.setProperty("hadoop.home.dir", "E:\\hadoop")
 
     //1.创建相应的context
     val sparkConf = new SparkConf()
@@ -23,7 +27,10 @@ object SQLContextApp {
     val sqlContext = new SQLContext(sc)
 
     //2.处理业务
-    val path = args(0)  //已参数的形式传进来   file:///c:Users/Administrator/Desktop/people.json
+    val path = args(0)  //已参数的形式传进来
+
+    // file:///c:Users/Administrator/Desktop/people.json
+    // file:///E:\\json\\people.json
     val dataFrame = sqlContext.read.format("json").load(path)
 
     dataFrame.printSchema() //查看表结构

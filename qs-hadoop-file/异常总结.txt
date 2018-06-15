@@ -8,3 +8,9 @@
         于是我告诉你，你可以去github下载一个，地球人都知道的地址发你一个。
         地址：https://github.com/srccodes/hadoop-common-2.2.0-bin
         不要顾虑它的版本，不用怕，因为我用的最新的hadoop-2.7.0都没问题！下载好后，把winutils.exe加入你的hadoop-x.x.x/bin下。
+
+2）qs-hadoop-sparkSQL 坑点：
+    1） com.qs.SQLContextApp 测试这个功能的时候，
+        val dataFrame = sqlContext.read.format("json").load(path)
+        从参数传进来的path 不能再系统的根目录下比如 E:/game.json (错误 ==>> Can not create a Path from an empty string)
+        需要修改一下目录 如：E:/json/game.json
