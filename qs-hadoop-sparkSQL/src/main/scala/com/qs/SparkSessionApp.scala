@@ -13,7 +13,7 @@ object SparkSessionApp {
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
 
     val sparkSession = SparkSession.builder()
-      .appName("sparkSessionAppDemo")
+      .appName("SparkSessionApp")
       .master("local[2]")
       .getOrCreate()
 

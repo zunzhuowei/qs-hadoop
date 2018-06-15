@@ -2,7 +2,6 @@ package com.qs
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
-//import spark.implicits._
 /**
   * 基于Data Frame RDD 的使用
   */
@@ -21,7 +20,7 @@ object DataFrameRDDApp {
 
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "E:\\hadoop")
-    Logger.getLogger("org.apache.spark").setLevel(Level.DEBUG)
+    Logger.getLogger("org.apache.spark").setLevel(Level.OFF)
 
     val sparkSession = SparkSession.builder()
       .appName("DataFrameRDDApp")
@@ -34,13 +33,26 @@ object DataFrameRDDApp {
     //RDD ==> DataFrame
     val rdd = sparkSession.sparkContext.textFile(path)
 
+    import sparkSession.implicits._  //隐式转换 toDF()
 
-    rdd.map(_.split(","))
-      .map(line => Info(line(0).toInt, line(1), line(2).toInt, line(3).toDouble))
+    val peopleDF = rdd.map(_.split(","))
+      .map(line => Info(line(0).toInt, line(1), line(2).toInt, line(3).toDouble)).toDF()
 
+    peopleDF.printSchema()
+    peopleDF.show()
+
+    peopleDF.createOrReplaceTempView("people")
+    // SQL statements can be run by using the sql methods provided by Spark
+    val teenagersDF = sparkSession.sql("SELECT name, age FROM people WHERE age BETWEEN 13 AND 23")//.limit(1)
+    // The columns of a row in the result can be accessed by field index
+    teenagersDF.map(teenager => "Name: " + teenager(0)).show()
 
   }
 
   case class Info(id:Int,name:String,age:Int,salary:Double)
+
+
+  //官方文档：http://spark.apache.org/docs/2.1.0/sql-programming-guide.html
+
 
 }

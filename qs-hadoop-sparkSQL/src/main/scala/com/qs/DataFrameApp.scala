@@ -13,7 +13,7 @@ object DataFrameApp {
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
 
     val sparkSession = SparkSession.builder()
-      .appName("sparkSessionAppDemo")
+      .appName("DataFrameApp")
       .master("local[2]")
       .getOrCreate()
 
