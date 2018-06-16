@@ -56,6 +56,12 @@
             <artifactId>hive-jdbc</artifactId>
             <version>1.2.1</version>
         </dependency>
+        <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.39</version>
+        </dependency>
 
         <!-- <dependency>
              <groupId>junit</groupId>
