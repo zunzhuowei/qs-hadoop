@@ -34,6 +34,7 @@ object ParquetApp {
     //将parquet 转成 json存到hdfs 中（也可以存在其他地方 ==>> 简单etl操作）
     df.select(df.col("name"),df.col("favorite_color")).write.json("hdfs://hadoop00:8020/parquetOut/")
 
+    spark.stop()
   }
 
 /*
