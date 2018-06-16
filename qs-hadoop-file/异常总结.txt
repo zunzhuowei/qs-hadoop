@@ -14,3 +14,21 @@
         val dataFrame = sqlContext.read.format("json").load(path)
         从参数传进来的path 不能再系统的根目录下比如 E:/game.json (错误 ==>> Can not create a Path from an empty string)
         需要修改一下目录 如：E:/json/game.json
+
+3)scala 隐式转换
+        val sparkSession = SparkSession.builder()
+          .appName("DataFrameRDDApp")
+          .master("local[2]")
+          .getOrCreate()
+
+        var path : String = "file:///E:\\json\\files.txt"
+        if (args.length > 0) path = args(0)
+
+        //RDD ==> DataFrame
+        val rdd = sparkSession.sparkContext.textFile(path)
+
+        import sparkSession.implicits._  //隐式转换 toDF()
+
+        val peopleDF = rdd.map(_.split(","))
+          .map(line => Info(line(0).toInt, line(1), line(2).toInt, line(3).toDouble)).toDF()
+
