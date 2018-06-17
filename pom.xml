@@ -18,6 +18,7 @@
         <module>qs-hadoop-flink</module>
         <module>qs-hadoop-spark</module>
         <module>qs-hadoop-sparkSQL</module>
+        <module>qs-hadoop-userLog-scala</module>
     </modules>
 
     <properties>
