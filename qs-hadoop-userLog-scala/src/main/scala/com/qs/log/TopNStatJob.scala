@@ -56,6 +56,10 @@ object TopNStatJob {
 
     sqlTopN.show(false)
 
+    //如果存在先删除
+    val date = sqlTopN.first().getAs[Int]("date")
+    StatTopNDao.deleteItemByDate(date,"accessdaylog")
+
 
     //写入mysql 中，方式一（事先不用创建表，自动创建表）：
     //autoETL(spark,sqlTopN)

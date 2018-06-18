@@ -32,8 +32,8 @@ object TopCityNStatJob {
 
     val accessDF = spark.read.format("parquet").load(path)
 
-    accessDF.printSchema()
-    accessDF.show(false)
+//    accessDF.printSchema()
+//    accessDF.show(false)
 
     import spark.implicits._
     //一：统计接口使用的top N
@@ -59,6 +59,10 @@ object TopCityNStatJob {
     ).filter($"times_rank" <= 3)
 
     //cityTOp3.show(false)
+
+    //如果存在先删除
+    val date = cityTOp3.first().getAs[Int]("date")
+    StatTopNDao.deleteItemByDate(date,"accesscitydaylog")
 
     InsertByEntity(cityTOp3)
 
