@@ -37,49 +37,46 @@ object TopNStatJob {
     //1）以DataFrame 的方式进行统计
     val interAccessTopN = accessDF
       .filter($"date" === "20180609" && $"interName" =!= "")
-      .groupBy($"interName")
+      .groupBy($"date",$"interName")
       .agg(count("interName").as("times"))//agg为聚合函数，跟在group by后
       .orderBy($"times".desc)
 
     interAccessTopN.show(false)
 
-    /*
-+-------------------+-----+
-|interName          |times|
-+-------------------+-----+
-|cookieJoinRoom.html|1648 |
-|joinViewUi.html    |1227 |
-|beforeShowLink.html|6    |
-|toLinkPage.html    |4    |
-|joinRoom.html      |2    |
-+-------------------+-----+
-     */
-
 
     //2) 以sql的方式进行统计
     accessDF.createOrReplaceTempView("userLog")
-    val sqlTopN = spark.sql("select interName,count(interName) as times from userLog " +
-      "where date = '20180609' and interName != '' group by interName order by times desc")
+    val sqlTopN = spark.sql("select date,interName,count(interName) as times from userLog " +
+      "where date = '20180609' and interName != '' group by date,interName order by times desc")
 
     sqlTopN.show(false)
-
-    /*
-
-+-------------------+-----+
-|interName          |times|
-+-------------------+-----+
-|cookieJoinRoom.html|1648 |
-|joinViewUi.html    |1227 |
-|beforeShowLink.html|6    |
-|toLinkPage.html    |4    |
-|joinRoom.html      |2    |
-+-------------------+-----+
-
-     */
 
     spark.stop()
   }
 
 
+  /*
+
+  +--------+-------------------+-----+
+|date    |interName          |times|
++--------+-------------------+-----+
+|20180609|cookieJoinRoom.html|1648 |
+|20180609|joinViewUi.html    |1227 |
+|20180609|beforeShowLink.html|6    |
+|20180609|toLinkPage.html    |4    |
+|20180609|joinRoom.html      |2    |
++--------+-------------------+-----+
+
++--------+-------------------+-----+
+|date    |interName          |times|
++--------+-------------------+-----+
+|20180609|cookieJoinRoom.html|1648 |
+|20180609|joinViewUi.html    |1227 |
+|20180609|beforeShowLink.html|6    |
+|20180609|toLinkPage.html    |4    |
+|20180609|joinRoom.html      |2    |
++--------+-------------------+-----+
+
+   */
 
 }
