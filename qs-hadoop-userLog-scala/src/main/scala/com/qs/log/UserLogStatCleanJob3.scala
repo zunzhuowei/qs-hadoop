@@ -16,7 +16,7 @@ object UserLogStatCleanJob3 {
     System.setProperty("hadoop.home.dir", "E:\\hadoop")
     Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 
-    val spark = SparkSession.builder().appName("UserLogStatCleanJob2")
+    val spark = SparkSession.builder().appName("UserLogStatCleanJob3")
       .master("local[2]").getOrCreate()
 
     var path : String = null
