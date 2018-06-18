@@ -19,6 +19,7 @@
         <module>qs-hadoop-spark</module>
         <module>qs-hadoop-sparkSQL</module>
         <module>qs-hadoop-userLog-scala</module>
+        <module>qs-hadoop-ipParser</module>
     </modules>
 
     <properties>

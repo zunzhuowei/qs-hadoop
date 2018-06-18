@@ -1,5 +1,6 @@
 package com.qs.log
 
+import com.ggstar.util.ip.IpHelper
 import com.qs.log.utils.DateUtils
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
@@ -50,6 +51,7 @@ object UserLogStatCleanJob {
     //cleanDs.show(false)
 
 
+    //第二步清洗
     val targetDs = cleanDs.filter(e => e.split("\t")(1).startsWith("/kxrobot/api/"))
       .map(line => {
         val ss = line.split("\t")
@@ -63,7 +65,7 @@ object UserLogStatCleanJob {
         var interName = src_uri.substring(0, src_uri.lastIndexOf(".html"))
         interName = interName.substring(interName.lastIndexOf("/") + 1) + ".html"
 
-        val city = "" //使用ip解析所在城市
+        val city = IpHelper.findRegionByIp(ip) //使用ip解析所在城市
 
         var roomer = ""
         if (interName.equals("joinViewUi.html")) {
@@ -89,17 +91,20 @@ object UserLogStatCleanJob {
     targetDs.sqlContext.sql("select * from userLog limit 10").show(false)
 
     //根据接口名字分组
-    targetDs.groupBy(targetDs.col("interName")).count()show(false)
+    targetDs.groupBy(targetDs.col("interName")).count().show(false)
 
     //根据日期分组
-    targetDs.groupBy(targetDs.col("date")).count()show(false)
+    targetDs.groupBy(targetDs.col("date")).count().show(false)
+
+    //根据日期分组
+    targetDs.groupBy(targetDs.col("city")).count().show(false)
 
     //关闭session
     spark.stop()
 
   }
 
-  case class UserLog(date : Long,interName:String,city:String,roomer:String) //发射
+  case class UserLog(date : Long,interName:String,city:String,roomer:String) //反射
 
 /*
 
