@@ -58,4 +58,25 @@
         </dependency>
     </dependencies>
 
+    <!--
+     依赖范围
+        maven中三种classpath
+        编译，测试，运行
+        1.compile：默认范围，编译测试运行都有效
+        2.provided：在编译和测试时有效
+        3.runtime：在测试和运行时有效
+        4.test:只在测试时有效
+        5.system:在编译和测试时有效，与本机系统关联，可移植性差
+     -->
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+
 </project>

@@ -1,4 +1,4 @@
-package com.qs.log
+package com.qs.log.clean
 
 import com.ggstar.util.ip.IpHelper
 import com.qs.log.utils.DateUtils

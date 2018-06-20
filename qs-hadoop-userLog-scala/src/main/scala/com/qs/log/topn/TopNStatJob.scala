@@ -1,12 +1,12 @@
-package com.qs.log
+package com.qs.log.topn
 
 import java.util.Properties
 
 import com.qs.log.dao.StatTopNDao
 import com.qs.log.model.StatEntity
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 import scala.collection.mutable.ListBuffer
 
@@ -73,7 +73,6 @@ object TopNStatJob {
 
   //方式一
   private def autoETL(spark: SparkSession, sqlTopN: DataFrame): Unit = {
-    import spark.implicits._
     val connectionProperties = new Properties()
     connectionProperties.put("user", "dev")
     connectionProperties.put("password", "dev")

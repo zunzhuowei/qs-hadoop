@@ -1,7 +1,7 @@
-package com.qs.log
+package com.qs.log.topn
 
 import com.qs.log.dao.StatTopNDao
-import com.qs.log.model.{StatCityEntity, StatPTypeEntity}
+import com.qs.log.model.StatPTypeEntity
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession}

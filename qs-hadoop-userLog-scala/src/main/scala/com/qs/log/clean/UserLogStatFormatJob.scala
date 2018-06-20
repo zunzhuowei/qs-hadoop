@@ -1,4 +1,4 @@
-package com.qs.log
+package com.qs.log.clean
 
 import com.qs.log.utils.DateUtils
 import org.apache.log4j.{Level, Logger}

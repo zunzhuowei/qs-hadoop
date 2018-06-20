@@ -1,4 +1,4 @@
-package com.qs.log
+package com.qs.log.topn
 
 import com.qs.log.dao.StatTopNDao
 import com.qs.log.model.StatCityEntity
