@@ -1,0 +1,314 @@
+
+课程整套CDH相关的软件下载地址：http://archive.cloudera.com/cdh5/cdh/5/
+cdh-5.7.0
+生产或者测试环境选择对应CDH版本时，一定要采用尾号是一样的版本
+
+
+
+http://hadoop.apache.org/
+对于Apache的顶级项目来说，projectname.apache.org
+Hadoop: hadoop.apache.org
+Hive: hive.apache.org
+Spark: spark.apache.org
+HBase: hbase.apache.org
+
+
+为什么很多公司选择Hadoop作为大数据平台的解决方案？
+1）源码开源
+2）社区活跃、参与者很多  Spark
+3）涉及到分布式存储和计算的方方面面： 
+	Flume进行数据采集
+	Spark/MR/Hive等进行数据处理
+	HDFS/HBase进行数据存储
+4) 已得到企业界的验证
+
+
+
+HDFS架构
+
+1 Master(NameNode/NN)  带 N个Slaves(DataNode/DN)
+HDFS/YARN/HBase
+
+1个文件会被拆分成多个Block
+blocksize：128M
+130M ==> 2个Block： 128M 和 2M
+
+NN：
+1）负责客户端请求的响应
+2）负责元数据（文件的名称、副本系数、Block存放的DN）的管理
+
+DN：
+1）存储用户的文件对应的数据块(Block)
+2）要定期向NN发送心跳信息，汇报本身及其所有的block信息，健康状况
+
+A typical deployment has a dedicated machine that runs only the NameNode software. 
+Each of the other machines in the cluster runs one instance of the DataNode software.
+The architecture does not preclude running multiple DataNodes on the same machine 
+but in a real deployment that is rarely the case.
+
+NameNode + N个DataNode
+建议：NN和DN是部署在不同的节点上
+
+
+replication factor：副本系数、副本因子
+
+All blocks in a file except the last block are the same size
+
+
+
+
+本课程软件存放目录
+hadoop/hadoop
+/home/hadoop
+	software: 存放的是安装的软件包
+	app : 存放的是所有软件的安装目录
+	data: 存放的是课程中所有使用的测试数据目录
+	source: 存放的是软件源码目录，spark
+
+
+Hadoop环境搭建
+1) 下载Hadoop
+	http://archive.cloudera.com/cdh5/cdh/5/
+	2.6.0-cdh5.7.0
+
+	wget http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.7.0.tar.gz
+
+2）安装jdk
+	下载
+	解压到app目录：tar -zxvf jdk-7u51-linux-x64.tar.gz -C ~/app/
+	验证安装是否成功：~/app/jdk1.7.0_51/bin      ./java -version
+	建议把bin目录配置到系统环境变量(~/.bash_profile)中
+		export JAVA_HOME=/home/hadoop/app/jdk1.7.0_51
+		export PATH=$JAVA_HOME/bin:$PATH
+
+
+3）机器参数设置
+	hostname: hadoop001
+	
+	修改机器名: /etc/sysconfig/network
+		NETWORKING=yes
+		HOSTNAME=hadoop001
+
+	设置ip和hostname的映射关系: /etc/hosts
+		192.168.199.200 hadoop001
+		127.0.0.1 localhost
+
+	ssh免密码登陆(本步骤可以省略，但是后面你重启hadoop进程时是需要手工输入密码才行)
+		ssh-keygen -t rsa
+		cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+
+4）Hadoop配置文件修改: ~/app/hadoop-2.6.0-cdh5.7.0/etc/hadoop
+	hadoop-env.sh
+		export JAVA_HOME=/home/hadoop/app/jdk1.7.0_51
+
+	core-site.xml
+		<property>
+        	<name>fs.defaultFS</name>
+        	<value>hdfs://hadoop001:8020</value>
+    	</property>	
+
+    	<property>
+        	<name>hadoop.tmp.dir</name>
+        	<value>/home/hadoop/app/tmp</value>
+    	</property>	
+
+    hdfs-site.xml
+    	<property>
+	        <name>dfs.replication</name>
+	        <value>1</value>
+	    </property>
+
+5）格式化HDFS
+	注意：这一步操作，只是在第一次时执行，每次如果都格式化的话，那么HDFS上的数据就会被清空
+	bin/hdfs namenode -format
+
+6）启动HDFS
+	sbin/start-dfs.sh
+
+	验证是否启动成功:
+		jps
+			DataNode
+			SecondaryNameNode
+			NameNode
+
+		浏览器
+			http://hadoop001:50070/
+
+
+7）停止HDFS
+	sbin/stop-dfs.sh
+
+
+
+
+
+YARN架构
+1 RM(ResourceManager) + N NM(NodeManager)
+
+ResourceManager的职责： 一个集群active状态的RM只有一个，负责整个集群的资源管理和调度
+1）处理客户端的请求(启动/杀死)
+2）启动/监控ApplicationMaster(一个作业对应一个AM)
+3）监控NM
+4）系统的资源分配和调度
+
+
+NodeManager：整个集群中有N个，负责单个节点的资源管理和使用以及task的运行情况
+1）定期向RM汇报本节点的资源使用请求和各个Container的运行状态
+2）接收并处理RM的container启停的各种命令
+3）单个节点的资源管理和任务管理
+
+ApplicationMaster：每个应用/作业对应一个，负责应用程序的管理
+1）数据切分
+2）为应用程序向RM申请资源(container)，并分配给内部任务
+3）与NM通信以启停task， task是运行在container中的
+4）task的监控和容错
+
+Container：
+对任务运行情况的描述：cpu、memory、环境变量
+
+YARN执行流程
+1）用户向YARN提交作业
+2）RM为该作业分配第一个container(AM)
+3）RM会与对应的NM通信，要求NM在这个container上启动应用程序的AM
+4) AM首先向RM注册，然后AM将为各个任务申请资源，并监控运行情况
+5）AM采用轮训的方式通过RPC协议向RM申请和领取资源
+6）AM申请到资源以后，便和相应的NM通信，要求NM启动任务
+7）NM启动我们作业对应的task
+
+
+
+YARN环境搭建
+mapred-site.xml
+	<property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+
+yarn-site.xml
+	<property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+
+启动yarn：sbin/start-yarn.sh
+
+验证是否启动成功
+	jps
+		ResourceManager
+		NodeManager
+
+	web: http://hadoop001:8088
+
+停止yarn： sbin/stop-yarn.sh
+
+提交mr作业到yarn上运行： wc
+
+/home/hadoop/app/hadoop-2.6.0-cdh5.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar
+
+hadoop jar /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar wordcount /input/wc/hello.txt /output/wc/
+
+当我们再次执行该作业时，会报错：
+FileAlreadyExistsException: 
+Output directory hdfs://hadoop001:8020/output/wc already exists
+
+
+
+Hive底层的执行引擎有：MapReduce、Tez、Spark
+	Hive on MapReduce
+	Hive on Tez
+	Hive on Spark
+
+压缩：GZIP、LZO、Snappy、BZIP2..
+存储：TextFile、SequenceFile、RCFile、ORC、Parquet
+UDF：自定义函数
+
+
+
+Hive环境搭建
+1）Hive下载：http://archive.cloudera.com/cdh5/cdh/5/
+	wget http://archive.cloudera.com/cdh5/cdh/5/hive-1.1.0-cdh5.7.0.tar.gz
+
+2）解压
+	tar -zxvf hive-1.1.0-cdh5.7.0.tar.gz -C ~/app/
+
+3）配置
+	系统环境变量(~/.bahs_profile)
+		export HIVE_HOME=/home/hadoop/app/hive-1.1.0-cdh5.7.0
+		export PATH=$HIVE_HOME/bin:$PATH
+
+	实现安装一个mysql， yum install xxx
+
+	hive-site.xml
+	<property>
+  		<name>javax.jdo.option.ConnectionURL</name>
+    	<value>jdbc:mysql://localhost:3306/sparksql?createDatabaseIfNotExist=true</value>
+    </property>
+    
+	<property>
+    	<name>javax.jdo.option.ConnectionDriverName</name>
+        <value>com.mysql.jdbc.Driver</value>
+   	</property>
+
+	<property>
+  		<name>javax.jdo.option.ConnectionUserName</name>
+    	<value>root</value>
+    </property>
+
+	<property>
+  		<name>javax.jdo.option.ConnectionPassword</name>
+    	<value>root</value>
+    </property>
+
+4）拷贝mysql驱动到$HIVE_HOME/lib/
+
+5）启动hive: $HIVE_HOME/bin/hive
+
+
+创建表
+CREATE  TABLE table_name 
+  [(col_name data_type [COMMENT col_comment])]
+  
+
+create table hive_wordcount(context string);
+
+加载数据到hive表
+LOAD DATA LOCAL INPATH 'filepath' INTO TABLE tablename 
+
+load data local inpath '/home/hadoop/data/hello.txt' into table hive_wordcount;
+
+
+select word, count(1) from hive_wordcount lateral view explode(split(context,'\t')) wc as word group by word;
+
+lateral view explode(): 是把每行记录按照指定分隔符进行拆解
+
+hive ql提交执行以后会生成mr作业，并在yarn上运行
+
+
+create table emp(
+empno int,
+ename string,
+job string,
+mgr int,
+hiredate string,
+sal double,
+comm double,
+deptno int
+) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+create table dept(
+deptno int,
+dname string,
+location string
+) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+load data local inpath '/home/hadoop/data/emp.txt' into table emp;
+load data local inpath '/home/hadoop/data/dept.txt' into table dept;
+
+求每个部门的人数
+select deptno, count(1) from emp group by deptno;
+
+
+
+
+
+

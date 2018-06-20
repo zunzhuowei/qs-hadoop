@@ -1,0 +1,103 @@
+提交Spark Application到环境中运行
+spark-submit \
+--name SQLContextApp \
+--class com.imooc.spark.SQLContextApp \
+--master local[2] \
+/home/hadoop/lib/sql-1.0.jar \
+/home/hadoop/app/spark-2.1.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.json
+
+
+注意：
+1）To use a HiveContext, you do not need to have an existing Hive setup
+2）hive-site.xml
+
+
+
+create table t(key string, value string);
+explain extended select a.key*(2+3), b.value from  t a join t b on a.key = b.key and a.key > 3;
+
+== Parsed Logical Plan ==
+'Project [unresolvedalias(('a.key * (2 + 3)), None), 'b.value]
++- 'Join Inner, (('a.key = 'b.key) && ('a.key > 3))
+   :- 'UnresolvedRelation `t`, a
+   +- 'UnresolvedRelation `t`, b
+
+== Analyzed Logical Plan ==
+(CAST(key AS DOUBLE) * CAST((2 + 3) AS DOUBLE)): double, value: string
+Project [(cast(key#321 as double) * cast((2 + 3) as double)) AS (CAST(key AS DOUBLE) * CAST((2 + 3) AS DOUBLE))#325, value#324]
++- Join Inner, ((key#321 = key#323) && (cast(key#321 as double) > cast(3 as double)))
+   :- SubqueryAlias a
+   :  +- MetastoreRelation default, t
+   +- SubqueryAlias b
+      +- MetastoreRelation default, t
+
+== Optimized Logical Plan ==
+Project [(cast(key#321 as double) * 5.0) AS (CAST(key AS DOUBLE) * CAST((2 + 3) AS DOUBLE))#325, value#324]
++- Join Inner, (key#321 = key#323)
+   :- Project [key#321]
+   :  +- Filter (isnotnull(key#321) && (cast(key#321 as double) > 3.0))
+   :     +- MetastoreRelation default, t
+   +- Filter (isnotnull(key#323) && (cast(key#323 as double) > 3.0))
+      +- MetastoreRelation default, t
+
+== Physical Plan ==
+*Project [(cast(key#321 as double) * 5.0) AS (CAST(key AS DOUBLE) * CAST((2 + 3) AS DOUBLE))#325, value#324]
++- *SortMergeJoin [key#321], [key#323], Inner
+   :- *Sort [key#321 ASC NULLS FIRST], false, 0
+   :  +- Exchange hashpartitioning(key#321, 200)
+   :     +- *Filter (isnotnull(key#321) && (cast(key#321 as double) > 3.0))
+   :        +- HiveTableScan [key#321], MetastoreRelation default, t
+   +- *Sort [key#323 ASC NULLS FIRST], false, 0
+      +- Exchange hashpartitioning(key#323, 200)
+         +- *Filter (isnotnull(key#323) && (cast(key#323 as double) > 3.0))
+            +- HiveTableScan [key#323, value#324], MetastoreRelation default, t
+
+
+
+
+thriftserver/beeline的使用
+1) 启动thriftserver: 默认端口是10000 ，可以修改
+2）启动beeline
+beeline -u jdbc:hive2://localhost:10000 -n hadoop
+
+
+修改thriftserver启动占用的默认端口号：
+./start-thriftserver.sh  \
+--master local[2] \
+--jars ~/software/mysql-connector-java-5.1.27-bin.jar  \
+--hiveconf hive.server2.thrift.port=14000 
+
+beeline -u jdbc:hive2://localhost:14000 -n hadoop
+
+
+thriftserver和普通的spark-shell/spark-sql有什么区别？
+1）spark-shell、spark-sql都是一个spark  application；
+2）thriftserver， 不管你启动多少个客户端(beeline/code)，永远都是一个spark application
+	解决了一个数据共享的问题，多个客户端可以共享数据；
+
+
+注意事项：在使用jdbc开发时，一定要先启动thriftserver
+Exception in thread "main" java.sql.SQLException: 
+Could not open client transport with JDBC Uri: jdbc:hive2://hadoop001:14000: 
+java.net.ConnectException: Connection refused
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
