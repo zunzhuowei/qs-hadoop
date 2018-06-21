@@ -1,0 +1,89 @@
+前置要求：
+1）Building Spark using Maven requires Maven 3.3.9 or newer and Java 7+
+2）export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
+
+mvn编译命令：
+./build/mvn -Pyarn -Phadoop-2.4 -Dhadoop.version=2.4.0 -DskipTests clean package
+	前提：需要对maven有一定的了解(pom.xml)
+
+<properties>
+    <hadoop.version>2.2.0</hadoop.version>
+    <protobuf.version>2.5.0</protobuf.version>
+    <yarn.version>${hadoop.version}</yarn.version>
+</properties>
+
+<profile>
+  <id>hadoop-2.6</id>
+  <properties>
+    <hadoop.version>2.6.4</hadoop.version>
+    <jets3t.version>0.9.3</jets3t.version>
+    <zookeeper.version>3.4.6</zookeeper.version>
+    <curator.version>2.6.0</curator.version>
+  </properties>
+</profile>
+
+./build/mvn -Pyarn -Phadoop-2.6 -Phive -Phive-thriftserver -Dhadoop.version=2.6.0-cdh5.7.0 -DskipTests clean package
+
+#推荐使用
+./dev/make-distribution.sh --name 2.6.0-cdh5.7.0 --tgz  -Pyarn -Phadoop-2.6 -Phive -Phive-thriftserver -Dhadoop.version=2.6.0-cdh5.7.0
+
+
+
+编译完成后：
+spark-$VERSION-bin-$NAME.tgz
+
+spark-2.1.0-bin-2.6.0-cdh5.7.0.tgz
+
+
+
+
+Spark Standalone模式的架构和Hadoop HDFS/YARN很类似的
+1 master + n worker
+
+
+spark-env.sh
+SPARK_MASTER_HOST=hadoop001
+SPARK_WORKER_CORES=2
+SPARK_WORKER_MEMORY=2g
+SPARK_WORKER_INSTANCES=1
+
+
+hadoop1 : master
+hadoop2 : worker
+hadoop3 : worker
+hadoop4 : worker
+...
+hadoop10 : worker
+
+slaves:
+hadoop2
+hadoop3
+hadoop4
+....
+hadoop10
+
+==> start-all.sh   会在 hadoop1机器上启动master进程，在slaves文件配置的所有hostname的机器上启动worker进程
+
+
+Spark WordCount统计
+val file = spark.sparkContext.textFile("file:///home/hadoop/data/wc.txt")
+val wordCounts = file.flatMap(line => line.split(",")).map((word => (word, 1))).reduceByKey(_ + _)
+wordCounts.collect
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
