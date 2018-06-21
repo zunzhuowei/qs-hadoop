@@ -15,7 +15,9 @@ object UserLogStatCleanJob3Yarn {
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 
-    val spark = SparkSession.builder().getOrCreate()
+    val spark = SparkSession.builder()
+      .config("spark.sql.parquet.compression.codec","gzip") //添加parquet 的gzip的压缩
+      .getOrCreate()
 
     val Array(inputPath, outputPath) = args
 
