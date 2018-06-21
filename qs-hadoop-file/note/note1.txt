@@ -8,3 +8,35 @@
     4）HUE
     5）Zeppelin
 
+2. spark on yarn 两种模式
+    Client  1)集群模式
+        Driver运行在Client端(提交Spark作业的机器)
+        Client会和请求到的Container进行通信来完成作业的调度和执行，Client是不能退出的
+        日志信息会在控制台输出：便于我们测试
+
+    Cluster  2)客户端模式
+        Driver运行在ApplicationMaster中
+        Client只要提交完作业之后就可以关掉，因为作业已经在YARN上运行了
+        日志是在终端看不到的，因为日志是在Driver上，只能通过yarn logs -applicationIdapplication_id
+
+   Cluster  2)
+    ./bin/spark-submit \
+    --class org.apache.spark.examples.SparkPi \
+    --master yarn-cluster \
+    --executor-memory 1G \
+    --num-executors 1 \
+    /home/hadoop/spark/examples/jars/spark-examples_2.11-2.1.0.jar \
+    4
+
+    Client  1)
+    提交运行自己的jar包：mvn assembly:assembly
+    ./bin/spark-submit \
+    --class com.qs.log.yarn.UserLogStatCleanJob3Yarn \
+    --name UserLogStatCleanJob3Yarn \
+    --master yarn \
+    --executor-memory 1G \
+    --num-executors 1 \
+    --files /home/hadoop/files/ipDatabase.csv,/home/hadoop/files/ipRegion.xlsx \
+    /home/hadoop/qs-hadoop-userLog-scala-1.0-SNAPSHOT-jar-with-dependencies.jar \
+    hdfs://hadoop00:8020/files/access.log hdfs://hadoop00:8020/imooc/clean
+
