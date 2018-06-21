@@ -29,13 +29,16 @@
     4
 
     Client  1)
+    ( --conf spark.sql.shuffle.partitions=100 )调整并行度为100，默认200。如果量大应该加大
     提交运行自己的jar包：mvn assembly:assembly
+
     ./bin/spark-submit \
     --class com.qs.log.yarn.UserLogStatCleanJob3Yarn \
     --name UserLogStatCleanJob3Yarn \
     --master yarn \
     --executor-memory 1G \
     --num-executors 1 \
+    --conf spark.sql.shuffle.partitions=100 \
     --files /home/hadoop/files/ipDatabase.csv,/home/hadoop/files/ipRegion.xlsx \
     /home/hadoop/qs-hadoop-userLog-scala-1.0-SNAPSHOT-jar-with-dependencies.jar \
     hdfs://hadoop00:8020/files/access.log hdfs://hadoop00:8020/imooc/clean
