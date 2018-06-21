@@ -79,6 +79,10 @@ object UserLogStatCleanJob3Yarn {
         UserLog(target_date.toLong, interName, city, roomer,date,pType)
       })
 
+    //如果 后面多次使用这个 targetDs 的话，先把这个结果缓存起来，下面继续用就很快了。
+    //Persist this Dataset with the default storage level (`MEMORY_AND_DISK`).
+    // 使用默认存储级别（“MEMORY_AND_DISK”）保存此数据集
+    targetDs.cache()
 
     //ETL
     targetDs.coalesce(1)//指定分区个数
@@ -87,6 +91,8 @@ object UserLogStatCleanJob3Yarn {
       .partitionBy("date")//使用的分区字段
         .save(outputPath)
 
+    //remove all blocks for it from memory and disk （从内存和磁盘中删除所有块）
+    targetDs.unpersist(true)
 
     //关闭session
     spark.stop()
