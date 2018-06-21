@@ -7,10 +7,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.BufferedReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Wang Zhe on 2015/8/11.
@@ -31,12 +28,8 @@ public class IpHelper {
         List<IpRelation> ipRelationList;
         try {
             ipRelationList = IpHelper.getIpRelation();
-            int count = 0;
             for (IpRelation ipRelation : ipRelationList) {
                 ipTree.train(ipRelation.getIpStart(), ipRelation.getIpEnd(), ipRelation.getProvince());
-                if(count > 10){
-                    break;
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,7 +49,7 @@ public class IpHelper {
 
         // <ipCode, province>
         Map<Integer, String> regionRelationMap = getRegionRelationMap();
-        String file =  IpHelper.class.getClassLoader().getResource(ipFile).getFile();
+        String file =  Objects.requireNonNull(IpHelper.class.getClassLoader().getResource(ipFile)).getFile();
         BufferedReader ipRelationReader = FileUtil.readFile(file);
 
         String line;
@@ -83,10 +76,11 @@ public class IpHelper {
      * @throws Exception
      */
     public static Map<Integer, String> getRegionRelationMap() throws Exception {
-        String file =  IpHelper.class.getClassLoader().getResource(regionFile).getFile();
+        String file =  Objects.requireNonNull(IpHelper.class.getClassLoader().getResource(regionFile)).getFile();
 
         Workbook workbook = PoiUtil.getWorkbook(file);
 
+        assert workbook != null;
         Sheet sheet = workbook.getSheetAt(0);
         Map<Integer, String> map = new HashMap<Integer, String>();
         int rowLen = sheet.getPhysicalNumberOfRows();
