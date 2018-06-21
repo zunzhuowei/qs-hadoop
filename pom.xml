@@ -21,6 +21,7 @@
         <module>qs-hadoop-userLog-scala</module>
         <module>qs-hadoop-ipParser</module>
         <module>qs-hadoop-webUi</module>
+        <module>qs-hadoop-kafka</module>
     </modules>
 
     <properties>
