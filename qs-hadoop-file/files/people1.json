@@ -1,0 +1,8 @@
+{"name":"Michael"}
+{"name":"Andy", "age":30}
+{"name":"Justin", "age":19}
+{"name":"Jeff", "age":20,"hobby":["篮球","足球","计算机"]}
+{"name":"Mimi", "age":19,"hobby":["看电视","打游戏","看书","上网"]}
+{"name":"Lisa", "age":21,"hobby":["看电视","打游戏","看书","上网"]}
+{"name":"Linda", "age":28,"friend":{"name":"zhangsan","age":1}}
+{"name":"Coco", "age":28,"childs":[{"name":"wangwu","age":3},{"name":"zhaoliu","age":4}]}
