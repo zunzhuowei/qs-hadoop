@@ -35,3 +35,12 @@
 4) 用java API 编程做kafka producer 的时候，Windows操作系统 hosts 文件没有添加
     指向kafka服务端的映射，  启动生产者，连接不上kafka。
     添加映射之后就可以了。（未发现为何出现此问题）
+
+5) kafka producer 的
+        //定义消息的key和value的数据类型都是字节数组
+        properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");//IntegerDeserializer
+        properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+   要与 consumer 的
+        properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+   匹配，否者订阅不到消息。
