@@ -50,3 +50,14 @@
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
    匹配，否者订阅不到消息。
+
+6)  启动hadoop或者关闭的时候（./start-all.sh 等命令时候）
+    Error: Cannot find configuration directory:xxx
+    Error: Cannot find configuration directory: xxx
+    export HADOOP_CONF_DIR=/opt/hadoop-2.7.1/etc/hadoop/ （正确）
+    （必须为全目录，不能为变量拼接）
+    export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop/ （错误）
+
+7）启动hbase的时候出现这个错误（原因：环境变量配置错了，少了一个“/”）
+    Error: Could not find or load main class org.apache.hadoop.hbase.util.HBaseConfTool
+    Error: Could not find or load main class org.apache.hadoop.hbase.zookeeper.ZKServerTool
