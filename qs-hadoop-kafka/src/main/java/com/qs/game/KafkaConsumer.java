@@ -47,7 +47,7 @@ public class KafkaConsumer extends Thread{
         // List<KafkaStream<byte[], byte[]>>  对应的数据流
         Map<String, List<KafkaStream<byte[], byte[]>>> messageStream =  consumer.createMessageStreams(topicCountMap);
 
-        KafkaStream<byte[], byte[]> stream = messageStream.get(topic).get(0);   //获取我们每次接收到的暑假
+        KafkaStream<byte[], byte[]> stream = messageStream.get(topic).get(0);   //获取我们每次接收到的数据
 
         ConsumerIterator<byte[], byte[]> iterator = stream.iterator();
 

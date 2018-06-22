@@ -36,6 +36,12 @@
     指向kafka服务端的映射，  启动生产者，连接不上kafka。
     添加映射之后就可以了。（未发现为何出现此问题）
 
+    --- 网上人家的回答：
+    2、/kafka_2.11-0.9.0.0/config/server.properties
+    listerners 需配置ip ,不能配置主机名，因本地Hosts中不存在对应的Ip配置，导致producer 无法连接
+    官网默认提示 设置host.name advertised.host.name 为Ip 时可以通过ip连接，但经过测试，此配置失败(经测试成功)。
+    （经过测试，我可以成功，不用此步骤  --->> ）只有通过修改Listerners 后成功。
+
 5) kafka producer 的
         //定义消息的key和value的数据类型都是字节数组
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");//IntegerDeserializer
