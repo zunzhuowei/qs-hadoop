@@ -22,6 +22,7 @@
         <module>qs-hadoop-ipParser</module>
         <module>qs-hadoop-webUi</module>
         <module>qs-hadoop-kafka</module>
+        <module>qs-hadoop-sparkStream</module>
     </modules>
 
     <properties>
