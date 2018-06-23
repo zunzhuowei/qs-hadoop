@@ -1,0 +1,16 @@
+Hadoop和Spark设置用户访问hdfs
+
+简单记录一下，以备不时之需：
+1.对于hadoop而言
+    如果hadoop没有启Kerberos或者从Kerberos获取的用户为null，那么获取HADOOP_USER_NAME环境变量，
+    并将它的值作为Hadoop执行用户。如果我们没有设置HADOOP_USER_NAME环境变量，那么程序将调用whoami来获取当前用户，
+    并用groups来获取用户所在组。所以可以设置环境变量：
+        export HADOOP_USER_NAME=hdfs
+        或者在程序中设置：
+        System.setProperty("HADOOP_USER_NAME", "hdfs");
+2.对于Spark
+    Spark默认将用户程序运行所在系统的当前登录用户作为用户程序的关联用户。
+    所以可以采用一下两种方法：
+        1.修改当前用户名为： hdfs
+        2.代码中添加：
+        System.setProperty("user.name", "hdfs");
