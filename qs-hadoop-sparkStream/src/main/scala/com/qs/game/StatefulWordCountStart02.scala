@@ -10,6 +10,11 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   */
 object StatefulWordCountStart02 {
 
+  /*
+
+测试： nc lk 6789
+ */
+
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "E:\\hadoop")
     System.setProperty("HADOOP_USER_NAME", "hadoop")
