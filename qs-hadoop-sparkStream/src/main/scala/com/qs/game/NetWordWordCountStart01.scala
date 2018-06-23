@@ -11,7 +11,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object NetWordWordCountStart01 {
 
   /*
-   测试： nc lk 6789
+   测试： nc -lk 6789
 
    */
 

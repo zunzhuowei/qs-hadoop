@@ -12,7 +12,7 @@ object StatefulWordCountStart02 {
 
   /*
 
-测试： nc lk 6789
+测试： nc -lk 6789
  */
 
   def main(args: Array[String]): Unit = {
