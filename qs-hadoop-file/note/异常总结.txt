@@ -81,3 +81,18 @@
     get - 返回安全模式是否开启的信息
     wait - 等待，一直到安全模式结束。
 
+9) idea 编译报错：scalac error: bad option: '-make:transitive' on mvn package via command line
+    参考：
+    1 问题描述：
+    ubuntu环境下用eclipse+maven开发scala的时候出现错误：scalac error: bad option: '-make:transitive' on mvn package via command line
+    2 解决方法：
+    （1）打开pom.xml，删除
+           <parameter value="-make:transitive"/>
+    （2）添加dependance
+
+        <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2_2.11</artifactId>
+            <version>2.4.6</version>
+            <scope>test</scope>
+        </dependency>
