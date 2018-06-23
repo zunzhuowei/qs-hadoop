@@ -1,5 +1,6 @@
 package com.qs.game
 
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
@@ -17,6 +18,7 @@ object NetWordWordCountStart01 {
   def main(args: Array[String]): Unit = {
     //java.io.IOException: Could not locate executable null\bin\winutils.exe in the Hadoop binaries.
     System.setProperty("hadoop.home.dir", "E:\\hadoop")
+    Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 
     val sparkConf = new SparkConf().setAppName("NetWordWordCountStart01").setMaster("local[*]")
 
