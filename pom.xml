@@ -23,6 +23,7 @@
         <module>qs-hadoop-webUi</module>
         <module>qs-hadoop-kafka</module>
         <module>qs-hadoop-sparkStream</module>
+        <module>qs-hadoop-logger</module>
     </modules>
 
     <properties>
