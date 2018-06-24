@@ -61,13 +61,13 @@ object KafkaIntegraStreamingDirectApp {
 
   params = solr:9092 hello_topic
 
-     ./bin/spark-submit \
-   --master local[2] \
-   --name KafkaIntegraStreamingReceiverApp \
-   --class com.qs.integration.KafkaIntegraStreamingReceiverApp \
-   --packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.1.0 \
-   /home/hadoop/jars/qs-hadoop-sparkStream-1.0-SNAPSHOT.jar \
-  solr:2181 test hello_topic 1
+    ./bin/spark-submit \
+ --master local[2] \
+ --name KafkaIntegraStreamingDirectApp \
+ --class com.qs.integration.KafkaIntegraStreamingDirectApp \
+ --packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.1.0 \
+ /home/hadoop/jars/qs-hadoop-sparkStream-1.0-SNAPSHOT.jar \
+solr:9092 hello_topic
 
    */
 }
