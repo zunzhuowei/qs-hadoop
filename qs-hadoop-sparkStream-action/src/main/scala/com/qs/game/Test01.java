@@ -6,4 +6,10 @@ package com.qs.game;
  */
 public class Test01 {
 
+    public static void main(String[] args) {
+        Test02.test02Func();
+
+
+    }
+
 }
