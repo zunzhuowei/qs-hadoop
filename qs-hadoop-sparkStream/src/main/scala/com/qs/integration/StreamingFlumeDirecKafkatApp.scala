@@ -58,5 +58,19 @@ object StreamingFlumeDirecKafkatApp {
  /home/hadoop/jars/qs-hadoop-sparkStream-1.0-SNAPSHOT.jar \
 solr:9092 hello_topic
 
+./spark-submit --master local[2]  \
+ --name StreamingFlumeDirecKafkatApp \
+ --class com.qs.integration.StreamingFlumeDirecKafkatApp \
+ /home/hadoop/jars/qs-hadoop-sparkStream-1.0-SNAPSHOT.jar \
+ docker:9092 hello_topic
+
+ ./spark-submit --master yarn-cluster \
+ --executor-memory 1G \
+ --num-executors 1  \
+ --name StreamingFlumeDirecKafkatApp \
+ --class com.qs.integration.StreamingFlumeDirecKafkatApp \
+ /home/hadoop/jars/qs-hadoop-sparkStream-1.0-SNAPSHOT.jar \
+ docker:9092 hello_topic
+
    */
 }
