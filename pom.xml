@@ -24,6 +24,7 @@
         <module>qs-hadoop-kafka</module>
         <module>qs-hadoop-sparkStream</module>
         <module>qs-hadoop-logger</module>
+        <module>qs-hadoop-sparkStream-action</module>
     </modules>
 
     <properties>
