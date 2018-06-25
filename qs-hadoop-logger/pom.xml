@@ -38,7 +38,7 @@
                     <archive>
                         <manifest>
                             <!-- 此处指定main方法入口的class -->
-                            <mainClass>com.qs.game.LogerGenerater</mainClass>
+                            <mainClass>com.qs.game.NginxAccessLogGenerater</mainClass>
                         </manifest>
                     </archive>
                     </configuration>
