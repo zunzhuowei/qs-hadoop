@@ -40,7 +40,7 @@ object InterfaceAccessStatisticsApp {
 
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
 
-    val sparkConf = new SparkConf().setMaster("local[10]").setAppName("InterfaceAccessStatisticsApp")
+    val sparkConf = new SparkConf()//.setMaster("local[10]").setAppName("InterfaceAccessStatisticsApp")
 
     val ssc = new StreamingContext(sparkConf,Seconds(1))
 
