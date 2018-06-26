@@ -1,4 +1,4 @@
-package com.qs.game
+package samples
 
 /**
   * Created by zun.wei on 2018/6/25 16:03.
