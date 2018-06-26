@@ -26,8 +26,8 @@ public class HBaseUtils {
      */
     private HBaseUtils() {
         configuration = new Configuration();
-        configuration.set("hbase.zookeeper.quorum", "docker:2181");
-        configuration.set("hbase.rootdir", "hdfs://hadoop000:8020/hbase");
+        configuration.set("hbase.zookeeper.quorum", "docker:2181,solr:2181");
+        configuration.set("hbase.rootdir", "hdfs://hadoop00:8020/hbase");
 
         try {
             admin = new HBaseAdmin(configuration);

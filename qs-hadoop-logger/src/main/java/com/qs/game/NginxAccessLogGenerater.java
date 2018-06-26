@@ -48,7 +48,7 @@ public class NginxAccessLogGenerater {
         STATUS_LIST.add(404);
         STATUS_LIST.add(500);
         STATUS_LIST.add(403);
-        STATUS_LIST.add(308);
+        STATUS_LIST.add(307);
     }
 
 
