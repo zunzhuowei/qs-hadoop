@@ -19,6 +19,7 @@ public class NginxAccessLogGenerater {
 
     private static final Random random = new Random();
     private static final String URL_PREFIX = "/app/api/";
+    private static final String URL_PREFIX_ACTI = "/acti/api/";
 
     private static final String POST = "POST";
     private static final String GET = "GET";
@@ -39,6 +40,9 @@ public class NginxAccessLogGenerater {
         ACCESS_URL_LIST.add(URL_PREFIX + "getOrder.do?mid=");
         ACCESS_URL_LIST.add(URL_PREFIX + "payNotify.do?mid=");
         ACCESS_URL_LIST.add(URL_PREFIX + "commitOrder.do?mid=");
+        ACCESS_URL_LIST.add(URL_PREFIX_ACTI + "getActiList.do?mid=");
+        ACCESS_URL_LIST.add(URL_PREFIX_ACTI + "getAddress.do?mid=");
+        ACCESS_URL_LIST.add(URL_PREFIX_ACTI + "getAwardList.do?mid=");
 
         STATUS_LIST.add(200);
         STATUS_LIST.add(404);
@@ -59,7 +63,7 @@ public class NginxAccessLogGenerater {
 
             int method = random.nextInt(2);
             stringBuilder.append(method == 1 ? POST : GET).append(" ");
-            int accessUrl = random.nextInt(6);
+            int accessUrl = random.nextInt(9);
             stringBuilder.append(ACCESS_URL_LIST.get(accessUrl));
 
             int mid = random.nextInt(10);
