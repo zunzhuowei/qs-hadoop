@@ -1,6 +1,11 @@
 server:
   servlet:
     context-path: /streaming
-  port: 9000
+  port: 80
+
+logging:
+  level:
+    root: info
+
 
 

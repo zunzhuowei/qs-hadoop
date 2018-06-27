@@ -41,7 +41,7 @@ public class InterfaceUtils {
             case 8 :
                 return "获取奖品列表接口";
                 default:
-                    return "";
+                    return "未知";
         }
     }
 
@@ -51,15 +51,15 @@ public class InterfaceUtils {
             case 200 :
                 return "请求已成功";
             case 404 :
-                return "请求失败,请求所希望得到的资源未被在服务器上发现";
+                return "请求失败,资源未发现";
             case 500 :
                 return "请求失败,服务器的程序码出错";
             case 403 :
-                return "服务器已经理解请求，但是拒绝执行它";
+                return "服务器接收请求，但拒绝执行";
             case 307 :
-                return "请求的资源现在临时从不同的URI 响应请求";
+                return "从不同的URI响应请求";
             default:
-                return "请求的资源现在临时从不同的URI 响应请求";
+                return "从不同的URI响应请求";
         }
     }
 

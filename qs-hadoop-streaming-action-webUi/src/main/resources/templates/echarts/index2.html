@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>APP后台接口访问次数</title>
+    <title>app接口访问成功的次数</title>
     <!-- 引入 ECharts 文件 -->
     <script src="js/echarts.min.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -21,12 +21,11 @@
         var playSrc = [];
         $.ajax({
             type : "POST",
-            url: "/streaming/log/get/20180628",
+            url: "/streaming/log/get/success/20180628",
             data : {},
             dataType :"json",
             async : false,
             success: function (result) {
-                //alert(result[0].name);
                 for (var i = 0; i < result.length; i++) {
                     playSrc.push({
                         "name": result[i].name,
@@ -40,7 +39,7 @@
         // 指定图表的配置项和数据
         var option = {
             title : {
-                text: 'APP后台接口访问次数',
+                text: 'APP接口访问成功的次数',
                 subtext: '今天到现在为止',
                 x:'center'
             },
@@ -57,7 +56,7 @@
             },
             series : [
                 {
-                    name: '访问次数',
+                    name: '访问成功次数',
                     type: 'pie',
                     radius : '55%',
                     center: ['50%', '60%'],
@@ -76,40 +75,6 @@
             myChart.setOption(option);
         },100);
 
-</script>
-
-<script>
-    /*$.ajax({
-        type : "POST",
-        url: "/streaming/log/get/20180628",
-        data : {},
-        dataType :"json",
-        async : true,
-        success: function (result) {
-            alert(result);
-        }
-    });*/
-
-   /* (function () {
-        var playSrc = [];
-        $.ajax({
-            type : "POST",
-            url: "/streaming/log/get/aaa",
-            data : {},
-            dataType :"json",
-            async : false,
-            success: function (result) {
-                alert(result);
-                for (var i = 0; i < result.length; i++) {
-                    playSrc.push({
-                        "name": result[i].pType,
-                        "value" : result[i].countPType
-                    })
-                }
-            }
-        });
-        return playSrc;
-    })()*/
 </script>
 </body>
 </html>
