@@ -61,9 +61,9 @@ object NginxAccessLogDao {
     fixedThreadPool.execute(new Runnable {
       override def run(): Unit = {
         countList.foreach(e => {
-          val table = hBaseUtils.getTable(ACCESS_LOG_TABLE_NAME)
+          val table = hBaseUtils.getTable(ACCESS_SUCCESS_LOG_TABLE_NAME)
           table.incrementColumnValue(Bytes.toBytes(e.time_key),
-            Bytes.toBytes(ACCESS_LOG_FIMALY_NAME),
+            Bytes.toBytes(ACCESS_SUCCESS_LOG_FIMALY_NAME),
             Bytes.toBytes(COLUMN), e.accessCount)
         })
       }
