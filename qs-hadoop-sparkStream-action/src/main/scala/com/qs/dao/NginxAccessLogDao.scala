@@ -22,6 +22,7 @@ object NginxAccessLogDao {
   val ACCESS_NAME : String = "name"
 
   var STATUS : Boolean = true
+  var STATUS2 : Boolean = true
 
   import java.util.concurrent.ExecutorService
   import java.util.concurrent.Executors
@@ -52,11 +53,11 @@ object NginxAccessLogDao {
 
 
   def saveAccessSuccessCountByList(countList : ListBuffer[AccessSuccessLog]) : Unit = {
-    if(STATUS && !hBaseUtils.tableExists(ACCESS_SUCCESS_LOG_TABLE_NAME)){
+    if(STATUS2 && !hBaseUtils.tableExists(ACCESS_SUCCESS_LOG_TABLE_NAME)){
       hBaseUtils.createTableIfExeitDrop(ACCESS_SUCCESS_LOG_TABLE_NAME,ACCESS_SUCCESS_LOG_FIMALY_NAME)
     }
 
-    if (STATUS) STATUS = false
+    if (STATUS2) STATUS2 = false
 
     fixedThreadPool.execute(new Runnable {
       override def run(): Unit = {
