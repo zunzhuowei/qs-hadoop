@@ -21,37 +21,54 @@ object NginxAccessLogDao {
   val COLUMN : String = "count"
   val ACCESS_NAME : String = "name"
 
+  var STATUS : Boolean = true
+
+  import java.util.concurrent.ExecutorService
+  import java.util.concurrent.Executors
+
+  val fixedThreadPool: ExecutorService = Executors.newFixedThreadPool(8)
 
   private val hBaseUtils = HBaseUtils.getInstance
 
 
-  def saveAccessCountByList(countList : ListBuffer[AccessLog]) : Long = {
-    if(!hBaseUtils.tableExists(ACCESS_LOG_TABLE_NAME))
+  def saveAccessCountByList(countList : ListBuffer[AccessLog]) : Unit = {
+    if(STATUS && !hBaseUtils.tableExists(ACCESS_LOG_TABLE_NAME)) {
       hBaseUtils.createTableIfExeitDrop(ACCESS_LOG_TABLE_NAME,ACCESS_LOG_FIMALY_NAME)
-    var i : Long = 0
-    countList.foreach(e => {
-      val table = hBaseUtils.getTable(ACCESS_LOG_TABLE_NAME)
-      table.incrementColumnValue(Bytes.toBytes(e.time_key),
-        Bytes.toBytes(ACCESS_LOG_FIMALY_NAME),
-        Bytes.toBytes(COLUMN), e.accessCount)
-      i += 1
+    }
+    if (STATUS) STATUS = false
+
+    fixedThreadPool.execute(new Runnable {
+      override def run(): Unit = {
+        countList.foreach(e => {
+          val table = hBaseUtils.getTable(ACCESS_LOG_TABLE_NAME)
+          table.incrementColumnValue(Bytes.toBytes(e.time_key),
+            Bytes.toBytes(ACCESS_LOG_FIMALY_NAME),
+            Bytes.toBytes(COLUMN), e.accessCount)
+        })
+      }
     })
-    i
+
   }
 
 
-  def saveAccessSuccessCountByList(countList : ListBuffer[AccessSuccessLog]) : Long = {
-    if(!hBaseUtils.tableExists(ACCESS_SUCCESS_LOG_TABLE_NAME))
+  def saveAccessSuccessCountByList(countList : ListBuffer[AccessSuccessLog]) : Unit = {
+    if(STATUS && !hBaseUtils.tableExists(ACCESS_SUCCESS_LOG_TABLE_NAME)){
       hBaseUtils.createTableIfExeitDrop(ACCESS_SUCCESS_LOG_TABLE_NAME,ACCESS_SUCCESS_LOG_FIMALY_NAME)
-    var i : Long = 0
-    countList.foreach(e => {
-      val table = hBaseUtils.getTable(ACCESS_SUCCESS_LOG_TABLE_NAME)
-      table.incrementColumnValue(Bytes.toBytes(e.time_key),
-        Bytes.toBytes(ACCESS_SUCCESS_LOG_FIMALY_NAME),
-        Bytes.toBytes(COLUMN), e.accessCount)
-      i += 1
+    }
+
+    if (STATUS) STATUS = false
+
+    fixedThreadPool.execute(new Runnable {
+      override def run(): Unit = {
+        countList.foreach(e => {
+          val table = hBaseUtils.getTable(ACCESS_LOG_TABLE_NAME)
+          table.incrementColumnValue(Bytes.toBytes(e.time_key),
+            Bytes.toBytes(ACCESS_LOG_FIMALY_NAME),
+            Bytes.toBytes(COLUMN), e.accessCount)
+        })
+      }
     })
-    i
+
   }
 
 

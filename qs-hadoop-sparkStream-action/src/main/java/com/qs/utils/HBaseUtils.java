@@ -2,7 +2,10 @@ package com.qs.utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
-import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
 
@@ -26,8 +29,8 @@ public class HBaseUtils {
      */
     private HBaseUtils() {
         configuration = new Configuration();
-        configuration.set("hbase.zookeeper.quorum", "docker:2181,solr:2181");
-        configuration.set("hbase.rootdir", "hdfs://hadoop00:8020/hbase");
+        configuration.set("hbase.zookeeper.quorum",ConfigUtils.getPropertyByKey("hbase.zookeeper.quorum"));
+        configuration.set("hbase.rootdir", ConfigUtils.getPropertyByKey("hbase.root.dir"));
 
         try {
             admin = new HBaseAdmin(configuration);
@@ -98,14 +101,18 @@ public class HBaseUtils {
      */
     public void createTableIfExeitDrop(String tableName,String familyName) throws IOException {
 		if (this.tableExists(tableName)) {
-			admin.disableTable(TableName.valueOf(tableName));
-			admin.deleteTable(TableName.valueOf(tableName));
-		}
-		HTableDescriptor table = new HTableDescriptor(TableName.valueOf(tableName));
-		table.addFamily(new HColumnDescriptor(familyName).setCompressionType(Compression.Algorithm.GZ));
-		System.out.print("Creating table. ");
-		admin.createTable(table);
-		//admin.close();
+            admin.disableTable(TableName.valueOf(tableName));
+            admin.deleteTable(TableName.valueOf(tableName));
+        }
+        synchronized (this) {
+            if (!this.tableExists(tableName)) {
+                HTableDescriptor table = new HTableDescriptor(TableName.valueOf(tableName));
+                table.addFamily(new HColumnDescriptor(familyName).setCompressionType(Compression.Algorithm.GZ));
+                System.out.print("Creating table. ");
+                admin.createTable(table);
+            }
+        }
+        //admin.close();
     }
 
     /**

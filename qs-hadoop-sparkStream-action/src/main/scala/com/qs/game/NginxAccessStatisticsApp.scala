@@ -2,12 +2,12 @@ package com.qs.game
 
 import com.qs.dao.NginxAccessLogDao
 import com.qs.model.{AccessLog, AccessSuccessLog}
-import com.qs.utils.{DateUtils, InterfaceUtils}
+import com.qs.utils.{ConfigUtils, DateUtils, InterfaceUtils}
 import kafka.serializer.StringDecoder
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
-import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.streaming.{Duration, Seconds, StreamingContext}
 
 import scala.collection.mutable.ListBuffer
 
@@ -29,16 +29,16 @@ object NginxAccessStatisticsApp {
       System.exit(1)
     }
 
-    System.setProperty("hadoop.home.dir", "E:\\hadoop")
-    System.setProperty("HADOOP_USER_NAME", "hadoop")
+    System.setProperty("hadoop.home.dir", ConfigUtils.getPropertyByKey("hadoop.home.dir"))
+    System.setProperty("HADOOP_USER_NAME", ConfigUtils.getPropertyByKey("hadoop.user.name"))
 
     val Array(brokers, topics) = args
 
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
 
-    val sparkConf = new SparkConf().setMaster("local[4]").setAppName("NginxAccessStatisticsApp")
+    val sparkConf = new SparkConf().setMaster("local[5]").setAppName("NginxAccessStatisticsApp")
 
-    val ssc = new StreamingContext(sparkConf,Seconds(1))
+    val ssc = new StreamingContext(sparkConf,Duration(100))
 
     val topicSet = topics.split(",").toSet
     val kafkaParam = Map[String, String]("metadata.broker.list" -> brokers)
