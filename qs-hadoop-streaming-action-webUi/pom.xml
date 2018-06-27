@@ -4,12 +4,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.qs.game</groupId>
-    <artifactId>qshadoopstreamingactionwebui</artifactId>
+    <artifactId>qs-hadoop-streaming-action-webUi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>qs-hadoop-streaming-action-webUi</name>
     <description>Demo project for Spring Boot</description>
+
+
+    <repositories>
+        <repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -22,6 +38,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <fastjson.version>1.2.41</fastjson.version>
+        <hadoop.version>2.6.0-cdh5.7.0</hadoop.version>
+        <spark-version>2.1.0</spark-version>
+        <hbase.version>1.2.0-cdh5.7.0</hbase.version>
     </properties>
 
     <dependencies>
@@ -49,6 +69,27 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-server</artifactId>
+            <version>${hbase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

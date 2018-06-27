@@ -96,3 +96,17 @@
             <version>2.4.6</version>
             <scope>test</scope>
         </dependency>
+
+
+10) ajax 收不到 返回的 String 值（因为dataType接收的为json格式，所以直接返回字符串接收不到）
+
+    $.ajax({
+        type : "POST",
+        url: "/streaming/log/get/aaa",
+        data : {},
+        //dataType :"json",
+        async : true,
+        success: function (result) {
+            alert(result);
+        }
+    });

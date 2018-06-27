@@ -1,0 +1,6 @@
+server:
+  servlet:
+    context-path: /streaming
+  port: 9000
+
+
