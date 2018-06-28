@@ -3,9 +3,23 @@ server:
     context-path: /streaming
   port: 80
 
+
+hbase:
+  url: hdfs://hadoop00:8020/hbase
+zookeeper:
+  url: docker:2181
+
+hadoop:
+  home:
+    dir: E:\\hadoop
+  user:
+      name: hadoop
+
+
+
 logging:
   level:
-    root: info
+    root: warn
 
 
 
