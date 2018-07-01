@@ -28,6 +28,9 @@ import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequest;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryAction;
+import org.elasticsearch.index.reindex.UpdateByQueryAction;
+import org.elasticsearch.index.reindex.UpdateByQueryRequestBuilder;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
@@ -107,7 +110,9 @@ public class TransportClientTest {
     @Before
     public void getClient() throws Exception {
         //设置集群名称
-        Settings settings = Settings.builder().put("cluster.name", "my-elasticsreach-application").build();// 集群名
+        Settings settings = Settings.builder().put("cluster.name", "my-elasticsreach-application")
+                .put("client.transport.sniff",true)
+                .build();// 集群名
 
         //创建client
         client = new PreBuiltTransportClient(settings)
@@ -141,6 +146,7 @@ public class TransportClientTest {
      */
     @Test
     public void CreateIndexAndMapping() throws Exception {
+        AnalyzeRequest request = new AnalyzeRequest();
 
         CreateIndexRequestBuilder cib = client.admin().indices().prepareCreate(article);
         XContentBuilder mapping = XContentFactory.jsonBuilder()
@@ -150,10 +156,10 @@ public class TransportClientTest {
                 .field("type", "string") //设置数据类型
                 .endObject()
                 .startObject("title")
-                .field("type", "string")
+                .field("type", "string").field("analyzer","ik_max_word")
                 .endObject()
                 .startObject("content")
-                .field("type", "string")
+                .field("type", "string").field("analyzer","ik_max_word")
                 .endObject()
                 .startObject("price")
                 .field("type", "string")
@@ -162,7 +168,7 @@ public class TransportClientTest {
                 .field("type", "string")
                 .endObject()
                 .startObject("tag")
-                .field("type", "string")
+                .field("type", "string").field("analyzer","ik_max_word")
                 .endObject()
                 .startObject("date")
                 .field("type", "date")  //设置Date类型
@@ -480,12 +486,12 @@ public class TransportClientTest {
      */
     @Test
     public void queryDelete() {
-//         String guid="AV49wyfCWmWw7AxKFxeb";
-//         String author="kkkkk";
-//         DeleteByQueryAction.INSTANCE.newRequestBuilder(client)
-//               .source(article)
-//               .filter(QueryBuilders.boolQuery().must(QueryBuilders.termQuery("id", guid)).must(QueryBuilders.termQuery("author", author)).must(QueryBuilders.typeQuery(content)))
-//               .get();
+         String guid="AV49wyfCWmWw7AxKFxeb";
+         String author="kkkkk";
+         DeleteByQueryAction.INSTANCE.newRequestBuilder(client)
+               .source(article)
+               .filter(QueryBuilders.boolQuery().must(QueryBuilders.termQuery("id", guid)).must(QueryBuilders.termQuery("author", author)).must(QueryBuilders.typeQuery(content)))
+               .get();
     }
 
 
@@ -494,10 +500,10 @@ public class TransportClientTest {
      */
     @Test
     public void deleteAll() {
-//         DeleteByQueryAction.INSTANCE.newRequestBuilder(client)
-//           .source(article)
-//           .filter(QueryBuilders.matchAllQuery())
-//           .get();
+         DeleteByQueryAction.INSTANCE.newRequestBuilder(client)
+           .source(article)
+           .filter(QueryBuilders.matchAllQuery())
+           .get();
     }
 
 
@@ -565,13 +571,13 @@ public class TransportClientTest {
      */
     @Test
     public void updateByQueryRequestBuilder() throws Exception {
-//        UpdateByQueryRequestBuilder updateByQueryRequestBuilder = UpdateByQueryAction.INSTANCE.newRequestBuilder(client);
-//        updateByQueryRequestBuilder
-//                .script(new Script(ScriptType.INLINE,"painless","ctx_source.likes++",null))
-//                .source()
-//                .setQuery(QueryBuilders.termQuery("author","kkkkk"))
-//                .setIndices(article)
-//                .get();
+        UpdateByQueryRequestBuilder updateByQueryRequestBuilder = UpdateByQueryAction.INSTANCE.newRequestBuilder(client);
+        updateByQueryRequestBuilder
+                .script(new Script(ScriptType.INLINE,"painless","ctx_source.likes++",null))
+                .source()
+                .setQuery(QueryBuilders.termQuery("author","kkkkk"))
+                .setIndices(article)
+                .get();
     }
 
 

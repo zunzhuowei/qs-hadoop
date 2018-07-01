@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch-analysis-ik</artifactId>
-            <version>5.5.1</version>
+            <version>5.2.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>elasticsearch</artifactId>
