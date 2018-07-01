@@ -146,8 +146,6 @@ public class TransportClientTest {
      */
     @Test
     public void CreateIndexAndMapping() throws Exception {
-        AnalyzeRequest request = new AnalyzeRequest();
-
         CreateIndexRequestBuilder cib = client.admin().indices().prepareCreate(article);
         XContentBuilder mapping = XContentFactory.jsonBuilder()
                 .startObject()
