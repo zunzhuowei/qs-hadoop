@@ -7,7 +7,7 @@ spring:
   data:
     elasticsearch:
       cluster-name: my-elasticsreach-application #默认即为 elasticsearch
-      cluster-nodes: 192.168.1.183:9300 #配置es节点信息，逗号分隔，如果没有指定，则启动ClientNode
+      cluster-nodes: 192.168.1.233:9300 #配置es节点信息，逗号分隔，如果没有指定，则启动ClientNode
       repositories:
         enabled: true
       properties:
@@ -15,3 +15,8 @@ spring:
         transport:
           tcp:
             connect_timeout: 120s
+
+
+logging:
+  level:
+    root: info

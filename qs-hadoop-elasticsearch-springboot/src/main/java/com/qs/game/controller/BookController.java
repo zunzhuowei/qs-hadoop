@@ -2,6 +2,7 @@ package com.qs.game.controller;
 
 import com.qs.game.dao.BookDao;
 import com.qs.game.entity.Book;
+import io.swagger.annotations.*;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
@@ -27,7 +28,8 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("/book/")
-@EnableSwagger2
+//@EnableSwagger2
+@Api(tags = {"this is book controller"})//这里应该用英文，中文会在文档中点不开
 public class BookController {
 
     /*
@@ -45,7 +47,7 @@ public class BookController {
     @GetMapping("/get/{id}")
     public Book getBookById(@PathVariable String id) {
         //return bookDao.findOne(id);
-        return bookDao.findById(id).get();
+        return bookDao.findById(id).orElse(new Book());
     }
 
     /**
@@ -55,7 +57,7 @@ public class BookController {
      */
     @GetMapping("/select/{q}")
     public List<Book> testSearch(@PathVariable String q) {
-        QueryStringQueryBuilder builder = new QueryStringQueryBuilder(q);
+        QueryStringQueryBuilder builder = new QueryStringQueryBuilder(q).field("message");
         Iterable<Book> searchResult = bookDao.search(builder);
         Iterator<Book> iterator = searchResult.iterator();
         List<Book> list = new ArrayList<Book>();
@@ -74,6 +76,19 @@ public class BookController {
      * @return
      */
     @GetMapping("/{page}/{size}/{q}")
+    @ApiOperation(value="分页查找书本列表",notes="页码必须为数字，页面大小也不需要为数字，关键字随便填")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页码", required = true, paramType = "form", dataType = "int"),
+            @ApiImplicitParam(name = "size", value = "页面大小", required = true, paramType = "form", dataType = "int"),
+            @ApiImplicitParam(name = "q", value = "查询关键字", required = true, paramType = "form", dataType = "String")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "请求参数没填好"),
+            @ApiResponse(code = 401, message = "请求路径未授权"),
+            @ApiResponse(code = 403, message = "请求路径被禁止"),
+            @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对"),
+            @ApiResponse(code = 0, message = "请求成功", response = Book.class)
+    })
     public List<Book> searchCity(@PathVariable Integer page, @PathVariable Integer size, @PathVariable String q) {
         // 分页参数
         Sort sort = new Sort(Sort.Direction.DESC,"id.keyword");
