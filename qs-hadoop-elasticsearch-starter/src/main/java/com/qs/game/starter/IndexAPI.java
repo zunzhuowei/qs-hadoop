@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * 创建索引api
  */
-public class IndexApi {
+public class IndexAPI {
 
     private static final FastDateFormat fastDateFormat = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 

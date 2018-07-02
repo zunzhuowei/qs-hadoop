@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>qs-hadoop-elasticsearch</artifactId>
+    <artifactId>qs-hadoop-elasticsearch-starter</artifactId>
 
     <dependencies>
         <dependency>
@@ -89,7 +89,7 @@
     </repositories>
 
     <build>
-        <finalName>qs-hadoop-elasticsearch</finalName>
+        <finalName>qs-hadoop-elasticsearch-starter</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
