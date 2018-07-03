@@ -77,10 +77,10 @@ public class BookController {
      */
     @GetMapping("/{page}/{size}/{q}")
     @ApiOperation(value="分页查找书本列表",notes="页码必须为数字，页面大小也不需要为数字，关键字随便填")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "当前页码", required = true, paramType = "form", dataType = "int"),
-            @ApiImplicitParam(name = "size", value = "页面大小", required = true, paramType = "form", dataType = "int"),
-            @ApiImplicitParam(name = "q", value = "查询关键字", required = true, paramType = "form", dataType = "String")
+    @ApiImplicitParams({//, paramType = "form",
+            @ApiImplicitParam(name = "page", value = "当前页码", required = true, paramType = "path", dataType = "int"),
+            @ApiImplicitParam(name = "size", value = "页面大小", required = true, paramType = "path", dataType = "int"),
+            @ApiImplicitParam(name = "q", value = "查询关键字", required = true, paramType = "path", dataType = "String")
     })
     @ApiResponses({
             @ApiResponse(code = 400, message = "请求参数没填好"),
@@ -93,7 +93,8 @@ public class BookController {
         // 分页参数
         Sort sort = new Sort(Sort.Direction.DESC,"id.keyword");
 //        Sort sort = new Sort(Sort.Direction.DESC,"name.keyword");
-        Pageable pageable = PageRequest.of(page, size, sort);
+        //Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(page, size);
 
         QueryStringQueryBuilder builder = new QueryStringQueryBuilder(q);
 
