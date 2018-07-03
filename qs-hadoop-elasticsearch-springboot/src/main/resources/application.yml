@@ -20,3 +20,6 @@ spring:
 logging:
   level:
     root: info
+
+#中文教程地址 https://es.xiaoleilu.com/010_Intro/25_Tutorial_Indexing.html
+#英文官网：https://www.elastic.co/guide/en/elasticsearch/reference/5.2/docs-index_.html
