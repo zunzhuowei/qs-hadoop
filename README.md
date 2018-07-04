@@ -14,7 +14,7 @@ qs-hadoop
 ├
 ├── qs-hadoop-elasticsearch-springboot -- elasticsearch集成springboot以及基本使用
 |
-├── qs-hadoop-elasticsearch-starter -- elasticsearch开始使用使用
+├── qs-hadoop-elasticsearch-starter -- elasticsearch开始使用
 |
 ├── qs-hadoop-file -- 学习相关的资料文件、以及遇到的坑点笔记
 |
