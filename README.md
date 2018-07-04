@@ -26,10 +26,34 @@ qs-hadoop
 ``` 
 
 ### 涉及到的编程语言及技术框架
-## 语言
-> java、scala
+#### 编程语言
+- java 1.8.0_161
+- scala 2.11.12
 
-## 技术框架
-> hadoop 2.6.2 (CDH)
-> spark 2.1.0
-> flink 
+#### 技术框架及选型
+- hadoop 2.6.0 (cdh5.7.0)
+
+- spark 2.1.0 (cdh5.7.0)
+
+- flink 1.5.0 （cdh5.7.0）
+
+- flume 1.6.0 (cdh5.7.0)
+
+- kafka kafka_2.11-0.9.0.0
+
+- hbase 1.2.0 (cdh5.7.0)
+
+- elasticsearch 5.2.0
+
+- hive 1.1.0 (cdh5.7.0)
+
+- spring boot 2.0.3.RELEASE
+
+- echarts 3.3.1
+
+- zookeeper-3.4.5 (cdh5.7.0)
+
+### 结束语
+> 本项目仅用于学习大数据生态圈使用，很多地方都是仅仅是demo形式，
+> 还有很多东西需要改进。
+> 项目随着学习进度持续更新...
