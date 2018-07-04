@@ -76,8 +76,24 @@ public class MapReduceApp {
      * @param args
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-
+        if (args.length != 2){
+            System.out.println("Two parameters are required <input path>,<out path>");
+            System.exit(1);
+        }
         Configuration configuration = new Configuration();
+
+/*
+
+        //远程提交mapreduce作业的时候用，如果jar报上传到集群环境，则把下面代码删除：
+        //hdfs://hadoop00:8020/files/access.log  hdfs://hadoop00:8020/nginxlogout
+        System.setProperty("HADOOP_USER_NAME", "hadoop");
+        System.setProperty("hadoop.home.dir", "E:\\hadoop");
+        //意思是跨平台提交，在windows下如果没有这句代码会报错 "/bin/bash: line 0: fg: no job control"
+        configuration.set("mapreduce.app-submission.cross-platform", "true");
+        //要提交到远程平台的本地jar包的位置
+        configuration.set("mapred.jar","D:\\idea_poject\\qs-hadoop\\qs-hadoop-mapreduce\\target\\qs-hadoop-mapreduce-1.0-SNAPSHOT.jar");
+
+*/
 
         Job job = Job.getInstance(configuration);
 
