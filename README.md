@@ -40,7 +40,7 @@ qs-hadoop
 |
 ├── qs-hadoop-streaming-action-webUi -- 基于java springboot编程的sparkstreaming实战数据图像化展示web ui界面(echarts)
 |
-├── qs-hadoop-userBehaviorLog -- 基于java编程的Mapreduce nginx日志用户行为离线处理分析
+├── qs-hadoop-userBehaviorLog -- 基于java编程的Mapreduce nginx日志用户行为离线处理分析,统计nginx用户访问日志的os个数
 |
 ├── qs-hadoop-userLog-scala -- 基于scala编程的spark nginx日志用户行为离线处理分析
 |
