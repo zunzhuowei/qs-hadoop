@@ -26,6 +26,7 @@
         <module>qs-hadoop-logger</module>
         <module>qs-hadoop-sparkStream-action</module>
         <module>qs-hadoop-elasticsearch-starter</module>
+        <module>qs-hadoop-storm</module>
     </modules>
 
     <properties>
