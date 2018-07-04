@@ -26,6 +26,7 @@ public class HDFSSrpingBootApp implements CommandLineRunner {
 
 
     public static void main(String[] args) {
+        //System.setProperty("HADOOP_USER_NAME", "hadoop");
         SpringApplication.run(HDFSSrpingBootApp.class, args);
     }
 
@@ -46,11 +47,11 @@ public class HDFSSrpingBootApp implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
         //如果不自定义FsShell对象则有些hdfs目录权限不能访问，只能访问本机器生成的目录。
-        //如以下该目录不能查询结果
-        Collection<FileStatus> fileStatuses = shell.lsr("/history");
+        //如以下该目录  不能  查询结果
+        Collection<FileStatus> fileStatuses = shell.lsr("/tmp");
 
         //如果不自定义FsShell对象则有些hdfs目录权限不能访问，只能访问本机器生成的目录。
-        //如以下该目录可以查询结果
+        //如以下该目录  可以  查询结果
         //Collection<FileStatus> fileStatuses = shell.lsr("/hdfsapi");
 
 
