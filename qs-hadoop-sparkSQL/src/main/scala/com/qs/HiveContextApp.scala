@@ -1,5 +1,6 @@
 package com.qs
 
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -14,6 +15,13 @@ object HiveContextApp {
     val sparkConf = new SparkConf()
     val sc = new SparkContext(sparkConf)
     val hiveContext = new HiveContext(sc)
+
+//    val spark = SparkSession.builder().enableHiveSupport().config(sparkConf)
+//      .appName("HiveContextApp").master("local[2]").getOrCreate()
+//    val df = spark.sql("show databases")
+//
+//    df.printSchema()
+//    df.show()
 
     //2.处理业务
     //val dataFrame = hiveContext.table("emp")
