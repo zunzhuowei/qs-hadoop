@@ -6,6 +6,7 @@
 
 ``` lua
 qs-hadoop
+├
 ├── qs-hadoop-elasticsearch-springboot -- elasticsearch集成springboot以及基本使用
 |
 ├── qs-hadoop-elasticsearch-starter -- elasticsearch开始使用使用
@@ -39,7 +40,10 @@ qs-hadoop
 ├── qs-hadoop-userLog-scala -- 基于scala编程的spark nginx日志用户行为离线处理分析
 |
 ├── qs-hadoop-webUi -- 基于java servlet编程的spark nginx日志用户行为离线处理分析的数据图像化展示web ui界面(echarts)
-
+|
+├── qs-hadoop-spring -- HDFS集成java spring开源框架的基本使用
+|
+├── qs-hadoop-springboot -- HDFS集成java springboot开源框架的基本使用
 ``` 
 
 ### 涉及到的编程语言及技术框架
