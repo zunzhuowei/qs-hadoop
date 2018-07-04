@@ -1,6 +1,11 @@
 ## qs-hadoop
   此项目用于学习大数据hadoop生态圈以及spark生态圈
   
+![hadoop](qs-hadoop-file/images/hadoop.jpg)
+
+![hadoop-Ecosphere](qs-hadoop-file/images/hadoop-Ecosphere.png)  
+
+![spark-Ecosphere.jpg](qs-hadoop-file/images/spark-Ecosphere.jpg)  
   
 ### 组织结构
 
