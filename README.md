@@ -49,6 +49,8 @@ qs-hadoop
 ├── qs-hadoop-spring -- HDFS集成java spring开源框架的基本使用
 |
 ├── qs-hadoop-springboot -- HDFS集成java springboot开源框架的基本使用
+|
+├── qs-hadoop-storm -- storm实时流计算的使用
 ``` 
 
 ### 涉及到的编程语言及技术框架
@@ -78,6 +80,8 @@ qs-hadoop
 - echarts 3.3.1
 
 - zookeeper-3.4.5 (cdh5.7.0)
+
+- storm 1.1.2
 
 ### 结束语
 > 本项目仅用于学习大数据生态圈使用，很多地方都是仅仅是demo形式，
