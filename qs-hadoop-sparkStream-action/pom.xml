@@ -105,6 +105,13 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
+        <!-- https://github.com/elastic/elasticsearch-hadoop -->
+        <!--<dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch-hadoop</artifactId>
+            <version>6.2.1</version>
+        </dependency>-->
     </dependencies>
 
     <build>
