@@ -1,5 +1,5 @@
 ## qs-hadoop
-  此项目用于学习大数据hadoop生态圈以及spark生态圈
+  此项目用于学习大数据hadoop生态圈以及storm、spark生态圈
   
 ![hadoop](qs-hadoop-file/images/hadoop.jpg)
 
