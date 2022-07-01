@@ -39,7 +39,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <fastjson.version>1.2.41</fastjson.version>
-        <hadoop.version>2.6.0-cdh5.7.0</hadoop.version>
+        <hadoop.version>2.7.0</hadoop.version>
         <spark-version>2.1.0</spark-version>
         <hbase.version>1.2.0-cdh5.7.0</hbase.version>
     </properties>
