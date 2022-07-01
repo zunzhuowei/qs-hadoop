@@ -30,7 +30,7 @@
     </modules>
 
     <properties>
-        <cdh.version>2.6.0-cdh5.7.0</cdh.version>
+        <cdh.version>2.7.0</cdh.version>
         <junit.version>4.12</junit.version>
         <fastjson.version>1.2.41</fastjson.version>
     </properties>
